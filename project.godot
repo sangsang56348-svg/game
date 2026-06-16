@@ -41,3 +41,7 @@ window/stretch/aspect="keep"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+
+[gui]
+
+theme/custom_font="res://assets/NanumGothic.ttf"
