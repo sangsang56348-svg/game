@@ -44,4 +44,4 @@ rendering_device/driver.windows="d3d12"
 
 [gui]
 
-theme/default_font="res://assets/NanumGothic.ttf"
+theme/default_font="res://fonts/NanumGothic-Regular.ttf"
