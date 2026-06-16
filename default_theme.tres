@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3 uid="uid://cfmytheme123"]
+
+[ext_resource type="FontFile" uid="uid://b13eak2243pty" path="res://fonts/NanumGothic-Regular.ttf" id="1_nanum_gothic"]
+
+[resource]
+default_font = ExtResource("1_nanum_gothic")
+default_font_size = 18
