@@ -1,0 +1,368 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scenes/scene_2.gd" id="1_scene2_script"]
+[ext_resource type="Texture2D" path="res://assets/topdown_forest.png" id="2_topdown_forest"]
+[ext_resource type="Script" path="res://scripts/interactable_trigger.gd" id="3_trigger_script"]
+[ext_resource type="Texture2D" path="res://assets/shelter.png" id="4_shelter_texture"]
+[ext_resource type="Texture2D" path="res://assets/crate.png" id="5_crate_texture"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="6_player_scene"]
+[ext_resource type="PackedScene" path="res://scenes/pickup_item.tscn" id="7_pickup_scene"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="8_hud_script"]
+[ext_resource type="PackedScene" path="res://scenes/virtual_pad.tscn" id="9_virtual_pad"]
+[ext_resource type="PackedScene" path="res://scenes/parrot.tscn" id="10_parrot_scene"]
+[ext_resource type="Texture2D" path="res://assets/thorns.png" id="11_thorns_texture"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_horiz_wall"]
+size = Vector2(1024, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vert_wall"]
+size = Vector2(50, 1024)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vert_wall_part"]
+size = Vector2(50, 412)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_trigger"]
+size = Vector2(160, 140)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(40, 200)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_thorn"]
+radius = 35.0
+
+[node name="Scene2" type="Node2D"]
+script = ExtResource("1_scene2_script")
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 1024.0
+offset_bottom = 1024.0
+texture = ExtResource("2_topdown_forest")
+stretch_mode = 6
+
+[node name="StaticBodies" type="Node2D" parent="."]
+
+[node name="TopWall" type="StaticBody2D" parent="StaticBodies"]
+position = Vector2(512, -25)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBodies/TopWall"]
+shape = SubResource("RectangleShape2D_horiz_wall")
+
+[node name="BottomWall" type="StaticBody2D" parent="StaticBodies"]
+position = Vector2(512, 1049)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBodies/BottomWall"]
+shape = SubResource("RectangleShape2D_horiz_wall")
+
+[node name="LeftWall" type="StaticBody2D" parent="StaticBodies"]
+position = Vector2(-25, 512)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBodies/LeftWall"]
+shape = SubResource("RectangleShape2D_vert_wall")
+
+[node name="RightWallTop" type="StaticBody2D" parent="StaticBodies"]
+position = Vector2(1049, 206)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBodies/RightWallTop"]
+shape = SubResource("RectangleShape2D_vert_wall_part")
+
+[node name="RightWallBottom" type="StaticBody2D" parent="StaticBodies"]
+position = Vector2(1049, 818)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBodies/RightWallBottom"]
+shape = SubResource("RectangleShape2D_vert_wall_part")
+
+[node name="ShelterArea" type="Area2D" parent="."]
+position = Vector2(400, 350)
+collision_layer = 4
+script = ExtResource("3_trigger_script")
+
+[node name="ShelterSprite" type="Sprite2D" parent="ShelterArea"]
+position = Vector2(0, 20)
+scale = Vector2(0.28, 0.28)
+texture = ExtResource("4_shelter_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShelterArea"]
+position = Vector2(0, 20)
+shape = SubResource("RectangleShape2D_trigger")
+
+[node name="InteractPrompt" type="Label" parent="ShelterArea"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -120.0
+offset_right = 80.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "[E] 집 짓기"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StorageArea" type="Area2D" parent="."]
+position = Vector2(600, 350)
+collision_layer = 4
+script = ExtResource("3_trigger_script")
+
+[node name="StorageSprite" type="Sprite2D" parent="StorageArea"]
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("5_crate_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StorageArea"]
+shape = SubResource("RectangleShape2D_trigger")
+
+[node name="InteractPrompt" type="Label" parent="StorageArea"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -100.0
+offset_right = 80.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "[E] 음식 저장"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Items" type="Node2D" parent="."]
+
+[node name="Wood1" parent="Items" instance=ExtResource("7_pickup_scene")]
+position = Vector2(250, 250)
+
+[node name="Wood2" parent="Items" instance=ExtResource("7_pickup_scene")]
+position = Vector2(750, 200)
+item_type = "wood"
+
+[node name="Wood3" parent="Items" instance=ExtResource("7_pickup_scene")]
+position = Vector2(300, 800)
+item_type = "wood"
+
+[node name="Stone1" parent="Items" instance=ExtResource("7_pickup_scene")]
+position = Vector2(800, 800)
+item_type = "stone"
+
+[node name="Fruit1" parent="Items" instance=ExtResource("7_pickup_scene")]
+position = Vector2(150, 700)
+item_type = "fruit"
+
+[node name="Player" parent="." instance=ExtResource("6_player_scene")]
+position = Vector2(150, 512)
+
+[node name="Parrot" parent="." instance=ExtResource("10_parrot_scene")]
+position = Vector2(500, 700)
+
+[node name="Thorns" type="Node2D" parent="."]
+
+[node name="Thorn1" type="Area2D" parent="Thorns"]
+position = Vector2(400, 600)
+collision_layer = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Thorns/Thorn1"]
+scale = Vector2(0.12, 0.12)
+texture = ExtResource("11_thorns_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Thorns/Thorn1"]
+shape = SubResource("CircleShape2D_thorn")
+
+[node name="Thorn2" type="Area2D" parent="Thorns"]
+position = Vector2(600, 700)
+collision_layer = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Thorns/Thorn2"]
+scale = Vector2(0.12, 0.12)
+texture = ExtResource("11_thorns_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Thorns/Thorn2"]
+shape = SubResource("CircleShape2D_thorn")
+
+[node name="Thorn3" type="Area2D" parent="Thorns"]
+position = Vector2(750, 450)
+collision_layer = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Thorns/Thorn3"]
+scale = Vector2(0.12, 0.12)
+texture = ExtResource("11_thorns_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Thorns/Thorn3"]
+shape = SubResource("CircleShape2D_thorn")
+
+[node name="ExitArea" type="Area2D" parent="."]
+position = Vector2(1010, 512)
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea"]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_hud_script")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD/MarginContainer"]
+layout_mode = 2
+
+[node name="EnergyHBox" type="HBoxContainer" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/spacing = 15
+
+[node name="Label" type="Label" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer/EnergyHBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "체력 (에너지)"
+
+[node name="EnergyBar" type="ProgressBar" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer/EnergyHBox"]
+custom_minimum_size = Vector2(250, 20)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+
+[node name="EnergyText" type="Label" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer/EnergyHBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "100 / 100"
+
+[node name="DefenseHBox" type="HBoxContainer" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DefenseText" type="Label" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer/DefenseHBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "방어력 점수: 0"
+
+[node name="InventoryLabel" type="Label" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -400.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 50.0
+grow_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "나뭇가지: 0/3 | 돌멩이: 0/1 | 과일: 없음"
+horizontal_alignment = 2
+
+[node name="DialoguePanel" type="Panel" parent="CanvasLayer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/DialoguePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 15.0
+offset_right = -30.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "내용 텍스트..."
+autowrap_mode = 2
+
+[node name="QTEPanel" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PromptLabel" type="Label" parent="CanvasLayer/QTEPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
+offset_top = 15.0
+offset_right = 180.0
+offset_bottom = 85.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "순서대로 누르세요:
+★ ★ ★"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerProgress" type="ProgressBar" parent="CanvasLayer/QTEPanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -45.0
+offset_right = 150.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 0
+value = 100.0
+show_percentage = false
+
+[node name="TransitionRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VirtualPad" parent="." instance=ExtResource("9_virtual_pad")]
+
+[connection signal="interacted" from="ShelterArea" to="." method="_on_shelter_area_interact"]
+[connection signal="interacted" from="StorageArea" to="." method="_on_storage_area_interact"]

@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_player_script"]
+[ext_resource type="Texture2D" path="res://assets/boy.png" id="2_player_texture"]
+[ext_resource type="Texture2D" path="res://assets/bottle.png" id="3_bottle_texture"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_player"]
+radius = 28.0
+height = 140.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interact"]
+size = Vector2(100, 140)
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 1
+collision_mask = 2
+script = ExtResource("1_player_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("2_player_texture")
+offset = Vector2(0, -350)
+
+[node name="HeldBottle" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(100, -250)
+rotation = 0.4
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_bottle_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+position = Vector2(0, -65)
+shape = SubResource("CapsuleShape2D_player")
+
+[node name="InteractArea" type="Area2D" parent="."]
+collision_layer = 1
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea"]
+position = Vector2(0, -65)
+shape = SubResource("RectangleShape2D_interact")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+limit_bottom = 648
+limit_left = 0
+position_value = Vector2(0, -100)
+drag_horizontal_enabled = true
+drag_vertical_enabled = true

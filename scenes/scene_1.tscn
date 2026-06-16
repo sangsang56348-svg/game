@@ -1,0 +1,190 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scenes/scene_1.gd" id="1_scene_script"]
+[ext_resource type="Texture2D" path="res://assets/beach_bg.png" id="2_bg_texture"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_player_scene"]
+[ext_resource type="PackedScene" path="res://scenes/interactable_box.tscn" id="4_box_scene"]
+[ext_resource type="Texture2D" path="res://assets/evil_spirit.png" id="5_evil_texture"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="6_hud_script"]
+[ext_resource type="PackedScene" path="res://scenes/virtual_pad.tscn" id="7_virtual_pad"]
+
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(2500, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(100, 1000)
+
+[node name="Scene1" type="Node2D"]
+script = ExtResource("1_scene_script")
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 2500.0
+offset_bottom = 648.0
+texture = ExtResource("2_bg_texture")
+stretch_mode = 6
+
+[node name="StaticBodies" type="Node2D" parent="."]
+
+[node name="Floor" type="StaticBody2D" parent="StaticBodies"]
+position = Vector2(1000, 620)
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBodies/Floor"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="LeftWall" type="StaticBody2D" parent="StaticBodies"]
+position = Vector2(-50, 324)
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBodies/LeftWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="StaticBodies"]
+position = Vector2(2050, 324)
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBodies/RightWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Boxes" type="Node2D" parent="."]
+
+[node name="BoxFood1" parent="Boxes" instance=ExtResource("4_box_scene")]
+position = Vector2(450, 520)
+
+[node name="BoxEvil1" parent="Boxes" instance=ExtResource("4_box_scene")]
+position = Vector2(800, 520)
+is_evil = true
+
+[node name="BoxFood2" parent="Boxes" instance=ExtResource("4_box_scene")]
+position = Vector2(1100, 520)
+
+[node name="BoxEvil2" parent="Boxes" instance=ExtResource("4_box_scene")]
+position = Vector2(1450, 520)
+is_evil = true
+
+[node name="BoxFood3" parent="Boxes" instance=ExtResource("4_box_scene")]
+position = Vector2(1750, 520)
+
+[node name="Player" parent="." instance=ExtResource("3_player_scene")]
+position = Vector2(150, 520)
+
+[node name="EvilEffectSprite" type="Sprite2D" parent="."]
+z_index = 5
+texture = ExtResource("5_evil_texture")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_hud_script")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD/MarginContainer"]
+layout_mode = 2
+
+[node name="EnergyHBox" type="HBoxContainer" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/spacing = 15
+
+[node name="Label" type="Label" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer/EnergyHBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "체력 (에너지)"
+
+[node name="EnergyBar" type="ProgressBar" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer/EnergyHBox"]
+custom_minimum_size = Vector2(250, 20)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+
+[node name="EnergyText" type="Label" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer/EnergyHBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "100 / 100"
+
+[node name="DefenseHBox" type="HBoxContainer" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DefenseText" type="Label" parent="CanvasLayer/HUD/MarginContainer/VBoxContainer/DefenseHBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "방어력 점수: 0"
+
+[node name="FoodScore" type="Label" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 50.0
+grow_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "음식 찾기: 0 / 3"
+horizontal_alignment = 2
+
+[node name="DialoguePanel" type="Panel" parent="CanvasLayer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+
+[node name="Label" type="Label" parent="CanvasLayer/DialoguePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 15.0
+offset_right = -30.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "내용 텍스트..."
+autowrap_mode = 2
+
+[node name="TransitionRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="VirtualPad" parent="." instance=ExtResource("7_virtual_pad")]
+

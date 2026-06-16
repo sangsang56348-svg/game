@@ -1,0 +1,75 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/virtual_pad.gd" id="1_pad_script"]
+[ext_resource type="Texture2D" path="res://assets/touch_ui.png" id="2_ui_texture"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_left"]
+atlas = ExtResource("2_ui_texture")
+region = Rect2(100, 250, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_right"]
+atlas = ExtResource("2_ui_texture")
+region = Rect2(330, 250, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_action"]
+atlas = ExtResource("2_ui_texture")
+region = Rect2(100, 510, 370, 370)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_throw"]
+atlas = ExtResource("2_ui_texture")
+region = Rect2(530, 510, 370, 370)
+
+[node name="VirtualPad" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_pad_script")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BtnLeft" type="TouchScreenButton" parent="Control"]
+position = Vector2(40, 390)
+scale = Vector2(0.5, 0.5)
+texture_normal = SubResource("AtlasTexture_left")
+passby_press = true
+action = "ui_left"
+
+[node name="BtnRight" type="TouchScreenButton" parent="Control"]
+position = Vector2(160, 390)
+scale = Vector2(0.5, 0.5)
+texture_normal = SubResource("AtlasTexture_right")
+passby_press = true
+action = "ui_right"
+
+[node name="BtnUp" type="TouchScreenButton" parent="Control"]
+position = Vector2(200, 280)
+rotation = 1.5708
+scale = Vector2(0.5, 0.5)
+texture_normal = SubResource("AtlasTexture_left")
+passby_press = true
+action = "ui_up"
+
+[node name="BtnDown" type="TouchScreenButton" parent="Control"]
+position = Vector2(100, 600)
+rotation = 4.71239
+scale = Vector2(0.5, 0.5)
+texture_normal = SubResource("AtlasTexture_left")
+passby_press = true
+action = "ui_down"
+
+[node name="BtnAction" type="TouchScreenButton" parent="Control"]
+position = Vector2(820, 470)
+scale = Vector2(0.38, 0.38)
+texture_normal = SubResource("AtlasTexture_action")
+action = "interact"
+
+[node name="BtnThrow" type="TouchScreenButton" parent="Control"]
+position = Vector2(980, 470)
+scale = Vector2(0.38, 0.38)
+texture_normal = SubResource("AtlasTexture_throw")
+action = "ui_select"
